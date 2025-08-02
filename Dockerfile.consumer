@@ -1,0 +1,45 @@
+# Use Python 3.11 slim image
+FROM python:3.11-slim
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    build-essential \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# First install numpy 1.x with --no-deps to prevent any upgrades
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
+    pip install --no-cache-dir --no-deps "numpy==1.26.4" && \
+    pip install --no-cache-dir "pyarrow==13.0.0" && \
+    pip install --no-cache-dir "jmespath>=1.0.1" && \  	
+    pip install --no-cache-dir "boto3>=1.34.0" "botocore>=1.34.0"
+
+# Copy requirements (without numpy/pyarrow)
+COPY requirements-consumer.txt requirements.txt
+
+# Install other dependencies with --no-deps
+RUN pip install --no-cache-dir --no-deps -r requirements.txt
+
+# Verify installations immediately after
+RUN python -c "import numpy; print('NumPy version:', numpy.__version__); import pyarrow; print('PyArrow version:', pyarrow.__version__)"
+
+# Copy application code
+COPY app/ .
+
+# Create logs directory
+RUN mkdir -p /app/logs
+
+# Set environment variables
+ENV PYTHONPATH=/app
+ENV PYTHONUNBUFFERED=1
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD python -c "import numpy; import pyarrow; print('Dependencies OK')" || exit 1
+
+# Run the consumer
+CMD ["python", "app/consumer_app.py"]
