@@ -6,3 +6,5 @@ This multi-part series will provide a hands-on guide to building a robust, real-
 
 # Solution Architecture
 We are going to be utilizing the power of a real-time streaming pipeline to move data from an OLTP SQL Server Database to a Kafka Topic using Debezium, then deserialize the data and consume it to a storage account using Python Consumer App while trying to save cost and optimize efficiency.
+
+![Architecture]("https://github.com/kiddojazz/Debezium_SQL_Server_Docker_Consumer_App_AWS_Athena/blob/main/images/Archtecture.png")
