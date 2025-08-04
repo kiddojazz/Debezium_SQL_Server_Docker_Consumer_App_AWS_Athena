@@ -5,6 +5,10 @@ create schema logis;
 
 select top 20 * from [logis].[tickets]
 
+select customer_type, count(customer_type) as total_customer_type, count(source) as total_source from [logis].[tickets]
+group by customer_type, source
+having count(customer_type) > 30
+
 
 select count(1) from [logis].[tickets]
 
@@ -43,6 +47,20 @@ SELECT is_cdc_enabled FROM sys.databases WHERE name = 'TicketingDB';
 
 -- At table level
 SELECT * FROM cdc.change_tables;
+
+
+select top 10 * from [logis].[tickets]
+
+UPDATE [logis].[tickets]
+SET customer_name = 'andyjazz',
+    customer_email = 'kiddojazz001@example.com'
+WHERE id = 1;
+
+SELECT * FROM [logis].[tickets] WHERE id = 3;
+
+DELETE FROM [logis].[tickets]
+WHERE id = 3;
+
 
 
 

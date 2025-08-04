@@ -15,7 +15,7 @@ volumes:
     driver: local
 
 services:
-# Kafka Broker with KRaft (No Zookeeper) - FIXED JMX
+# Kafka Broker with KRaft (No Zookeeper)
   kafka:
     image: confluentinc/cp-kafka:7.5.0
     container_name: kafka-ssms
@@ -74,7 +74,7 @@ services:
       timeout: 10s
       retries: 3
 
-# Kafka Connect with Debezium - Updated for SQL Server host access
+# Kafka Connect with Debezium
   kafka-connect:
     image: debezium/connect:2.4
     container_name: kafka-connect-ssms
@@ -128,7 +128,7 @@ services:
     networks:
       - data_pipeline_network
 
-  # Kafka UI (Optional - for better Kafka management)
+  # Kafka UI
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     container_name: kafka-ui-ssms
