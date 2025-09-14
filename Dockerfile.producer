@@ -20,4 +20,4 @@ RUN pip install --no-cache-dir -r requirements-consumer.txt
 
 COPY app/ .
 
-CMD ["python", "app/consumer_app.py"]
+CMD ["python", "app/producers.py"]
